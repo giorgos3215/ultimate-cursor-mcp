@@ -497,29 +497,28 @@ configSchema:
   properties:
     NODE_ENV:
       type: string
-      description: Environment variable: NODE_ENV
+      description: "Environment variable"
+      default: "production"
     SUPABASE_URL:
       type: string
-      description: Supabase project URL (optional)
+      description: "Supabase project URL (optional)"
     SUPABASE_API_KEY:
       type: string
-      description: Supabase API key (optional)
+      description: "Supabase API key (optional)"
 
-commandFunction:
-# A JS function that produces the CLI command based on the given config to start the MCP on stdio.
-|-
-(config) => { 
-  const env = {};
-  if (config.NODE_ENV) env.NODE_ENV = config.NODE_ENV;
-  if (config.SUPABASE_URL) env.SUPABASE_URL = config.SUPABASE_URL;
-  if (config.SUPABASE_API_KEY) env.SUPABASE_API_KEY = config.SUPABASE_API_KEY;
-  
-  return { 
-    command: 'node', 
-    args: ['src/enhanced-mcp.js'],
-    env
-  };
-}
+commandFunction: |-
+  (config) => { 
+    const env = {};
+    if (config.NODE_ENV) env.NODE_ENV = config.NODE_ENV;
+    if (config.SUPABASE_URL) env.SUPABASE_URL = config.SUPABASE_URL;
+    if (config.SUPABASE_API_KEY) env.SUPABASE_API_KEY = config.SUPABASE_API_KEY;
+    
+    return { 
+      command: 'node', 
+      args: ['src/cursor-mcp-wrapper.js'],
+      env
+    };
+  }
 
 tags:
   - cursor
