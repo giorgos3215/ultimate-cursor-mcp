@@ -490,7 +490,13 @@ configSchema:
       description: Environment variable
       default: production
 
-commandFunction: "function(config) { var env = {}; if (config.NODE_ENV) env.NODE_ENV = config.NODE_ENV; return { command: 'node', args: ['src/cursor-mcp-wrapper.js'], env: env }; }"
+commandFunction: >
+  function(config) {
+    return {
+      command: 'node',
+      args: ['src/cursor-mcp-wrapper.js']
+    };
+  }
 
 tags:
   - cursor
