@@ -6,11 +6,11 @@ description: A comprehensive, self-evolving MCP for Cursor IDE with powerful web
 
 author: Ultimate MCP Team
 license: MIT
-homepage: https://github.com/username/ultimate-cursor-mcp
+homepage: https://github.com/giorgos3215/ultimate-cursor-mcp
 
 repository:
   type: git
-  url: https://github.com/username/ultimate-cursor-mcp.git
+  url: https://github.com/giorgos3215/ultimate-cursor-mcp.git
 
 main: src/cursor-mcp-wrapper.js
 capabilities:
@@ -70,7 +70,7 @@ readme: |
   python3 tools/mcp_installer.py supabase --url "https://yourproject.supabase.co" --key "your-api-key"
   ```
   
-  See the full documentation at: https://github.com/username/ultimate-cursor-mcp
+  See the full documentation at: https://github.com/giorgos3215/ultimate-cursor-mcp
 
 tools:
   # Basic Tools
@@ -484,9 +484,9 @@ requirements:
 # Documentation links
 documentation:
   - label: GitHub Repository
-    url: https://github.com/username/ultimate-cursor-mcp
+    url: https://github.com/giorgos3215/ultimate-cursor-mcp
   - label: Usage Guide
-    url: https://github.com/username/ultimate-cursor-mcp/blob/main/README.md
+    url: https://github.com/giorgos3215/ultimate-cursor-mcp/blob/main/README.md
 
 startCommand:
   type: stdio
@@ -531,10 +531,10 @@ tags:
 
 links:
   - label: GitHub Repository
-    url: https://github.com/username/ultimate-cursor-mcp
+    url: https://github.com/giorgos3215/ultimate-cursor-mcp
   - label: Issue Tracker
-    url: https://github.com/username/ultimate-cursor-mcp/issues
+    url: https://github.com/giorgos3215/ultimate-cursor-mcp/issues
   - label: Documentation
-    url: https://github.com/username/ultimate-cursor-mcp/blob/main/README.md
+    url: https://github.com/giorgos3215/ultimate-cursor-mcp/blob/main/README.md
   - label: Supabase Integration Guide
-    url: https://github.com/username/ultimate-cursor-mcp/blob/main/docs/supabase.md 
+    url: https://github.com/giorgos3215/ultimate-cursor-mcp/blob/main/docs/supabase.md 
