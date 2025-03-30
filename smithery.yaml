@@ -2,7 +2,7 @@
 name: ultimate-cursor-mcp
 displayName: Ultimate Self-Evolving Cursor MCP
 version: 1.0.0
-description: A comprehensive, self-evolving MCP for Cursor IDE with powerful web, code, file operations and Supabase integration
+description: A comprehensive, self-evolving MCP for Cursor IDE
 
 author: Ultimate MCP Team
 license: MIT
@@ -15,23 +15,14 @@ repository:
 main: src/cursor-mcp-wrapper.js
 capabilities:
   tools: true
-  restart: true
-
-engines:
-  node: ">=18.0.0"
 
 installation:
   command: node
-  args: ["src/cursor-mcp-wrapper.js"]
+  args:
+    - src/cursor-mcp-wrapper.js
   env:
-    NODE_ENV: "production"
-    MCP_SERVER_SCRIPT: "src/enhanced-mcp.js"
-    MCP_LOG_LEVEL: "info"
-    MCP_MEMORY_FILE: "memory.json"
-    MCP_RULES_FILE: ".cursorrules"
-    # Optional Supabase integration
-    SUPABASE_URL: ""
-    SUPABASE_API_KEY: ""
+    NODE_ENV: production
+    MCP_SERVER_SCRIPT: src/enhanced-mcp.js
 
 readme: |
   # Ultimate Self-Evolving Cursor MCP
@@ -492,33 +483,14 @@ startCommand:
   type: stdio
 
 configSchema:
-  # JSON Schema defining the configuration options for the MCP
   type: object
   properties:
     NODE_ENV:
       type: string
-      description: "Environment variable"
-      default: "production"
-    SUPABASE_URL:
-      type: string
-      description: "Supabase project URL (optional)"
-    SUPABASE_API_KEY:
-      type: string
-      description: "Supabase API key (optional)"
+      description: Environment variable
+      default: production
 
-commandFunction: |-
-  (config) => { 
-    const env = {};
-    if (config.NODE_ENV) env.NODE_ENV = config.NODE_ENV;
-    if (config.SUPABASE_URL) env.SUPABASE_URL = config.SUPABASE_URL;
-    if (config.SUPABASE_API_KEY) env.SUPABASE_API_KEY = config.SUPABASE_API_KEY;
-    
-    return { 
-      command: 'node', 
-      args: ['src/cursor-mcp-wrapper.js'],
-      env
-    };
-  }
+commandFunction: "function(config) { var env = {}; if (config.NODE_ENV) env.NODE_ENV = config.NODE_ENV; return { command: 'node', args: ['src/cursor-mcp-wrapper.js'], env: env }; }"
 
 tags:
   - cursor
