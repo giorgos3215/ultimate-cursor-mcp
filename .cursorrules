@@ -1,0 +1,357 @@
+# Instructions
+
+During your interaction with the user, if you find anything reusable in this project (e.g. version of a library, model name), especially about a fix to a mistake you made or a correction you received, you should take note in the `Lessons` section in the `.cursorrules` file so you will not make the same mistake again. 
+
+You should also use the `.cursorrules` file as a Scratchpad to organize your thoughts. Especially when you receive a new task, you should first review the content of the Scratchpad, clear old different task if necessary, first explain the task, and plan the steps you need to take to complete the task. You can use todo markers to indicate the progress, e.g.
+[X] Task 1
+[ ] Task 2
+
+Also update the progress of the task in the Scratchpad when you finish a subtask.
+Especially when you finished a milestone, it will help to improve your depth of task accomplishment to use the Scratchpad to reflect and plan.
+The goal is to help you maintain a big picture as well as the progress of the task. Always refer to the Scratchpad when you plan the next step.
+
+# Tools
+
+Note all the tools are in python3. So in the case you need to do batch processing, you can always consult the python files and write your own script.
+
+## MCP Installer
+
+The MCP installer (tools/mcp_installer.py) allows you to install and configure MCP servers. You can use it to install both remote (npm/PyPI) packages and local MCP servers.
+
+### Remote Package Installation
+```bash
+python3 tools/mcp_installer.py install PACKAGE_NAME [--args ARG1 ARG2...] [--env KEY1=VAL1 KEY2=VAL2...]
+```
+
+Example:
+```bash
+# Install a basic MCP server
+python3 tools/mcp_installer.py install mcp-server-fetch
+
+# Install with arguments
+python3 tools/mcp_installer.py install @modelcontextprotocol/server-filesystem --args "/Users/username/Desktop"
+
+# Install with environment variables
+python3 tools/mcp_installer.py install @modelcontextprotocol/server-github --env GITHUB_TOKEN=abc123
+```
+
+### Local Package Installation
+```bash
+python3 tools/mcp_installer.py local PATH [--args ARG1 ARG2...] [--env KEY1=VAL1 KEY2=VAL2...]
+```
+
+Example:
+```bash
+# Install a local MCP server
+python3 tools/mcp_installer.py local /path/to/local/server
+
+# Install with arguments and environment variables
+python3 tools/mcp_installer.py local ./my-mcp-server --args "--dev" --env NODE_ENV=development
+```
+
+### Understanding User Requests
+
+When users ask to install MCP servers, they might use various phrasings. Here are common patterns and how to handle them:
+
+1. Direct package name:
+   > "Install the MCP server named mcp-server-fetch"
+   - Use: `install` command with package name
+
+2. Package with arguments:
+   > "Install @modelcontextprotocol/server-filesystem with arguments ['/path/to/dir']"
+   - Use: `install` command with --args
+
+3. Local server:
+   > "Install the MCP server from /path/to/local/server"
+   - Use: `local` command with path
+
+4. Package with environment variables:
+   > "Install @modelcontextprotocol/server-github with GITHUB_TOKEN=xyz"
+   - Use: `install` command with --env
+
+Always verify:
+1. Package/path exists
+2. Package is MCP-compliant
+3. Required tools (node, npm, uvx) are available
+
+## Screenshot Verification
+
+The screenshot verification workflow allows you to capture screenshots of web pages and verify their appearance using LLMs. The following tools are available:
+
+1. Screenshot Capture:
+```bash
+venv/bin/python3 tools/screenshot_utils.py URL [--output OUTPUT] [--width WIDTH] [--height HEIGHT]
+```
+
+2. LLM Verification with Images:
+```bash
+venv/bin/python3 tools/llm_api.py --prompt "Your verification question" --provider {openai|anthropic} --image path/to/screenshot.png
+```
+
+Example workflow:
+```python
+from screenshot_utils import take_screenshot_sync
+from llm_api import query_llm
+
+# Take a screenshot
+
+screenshot_path = take_screenshot_sync('https://example.com', 'screenshot.png')
+
+# Verify with LLM
+
+response = query_llm(
+    "What is the background color and title of this webpage?",
+    provider="openai",  # or "anthropic"
+    image_path=screenshot_path
+)
+print(response)
+```
+
+## LLM
+
+You always have an LLM at your side to help you with the task. For simple tasks, you could invoke the LLM by running the following command:
+```
+venv/bin/python3 ./tools/llm_api.py --prompt "What is the capital of France?" --provider "anthropic"
+```
+
+The LLM API supports multiple providers:
+- OpenAI (default, model: gpt-4o)
+- Azure OpenAI (model: configured via AZURE_OPENAI_MODEL_DEPLOYMENT in .env file, defaults to gpt-4o-ms)
+- DeepSeek (model: deepseek-chat)
+- Anthropic (model: claude-3-sonnet-20240229)
+- Gemini (model: gemini-pro)
+- Local LLM (model: Qwen/Qwen2.5-32B-Instruct-AWQ)
+
+But usually it's a better idea to check the content of the file and use the APIs in the `tools/llm_api.py` file to invoke the LLM if needed.
+
+## Web browser
+
+You could use the `tools/web_scraper.py` file to scrape the web.
+```bash
+venv/bin/python3 ./tools/web_scraper.py --max-concurrent 3 URL1 URL2 URL3
+```
+This will output the content of the web pages.
+
+## Search engine
+
+You could use the `tools/search_engine.py` file to search the web.
+```bash
+venv/bin/python3 ./tools/search_engine.py "your search keywords"
+```
+This will output the search results in the following format:
+```
+URL: https://example.com
+Title: This is the title of the search result
+Snippet: This is a snippet of the search result
+```
+If needed, you can further use the `web_scraper.py` file to scrape the web page content.
+
+# Lessons
+
+- Always ensure proper JSON-RPC 2.0 formatting for MCP servers
+- Always test your MCP implementation with a dedicated test script
+- Always test your MCP implementation with a dedicated test script
+- Always test your MCP implementation with a dedicated test script
+- MCP implementations must strictly follow JSON-RPC 2.0 protocol, sending valid JSON responses to stdout and debug messages to stderr
+- For MCP servers, never use console.log for debugging as it sends output to stdout which can interfere with JSON-RPC messages
+- When implementing an MCP server, ensure proper line-by-line processing of JSON-RPC requests and responses
+- For debugging MCP servers, always redirect informational messages to stderr using console.error instead of console.log
+- Cursor's MCP configuration uses "mcpServers" object format, not "servers" array
+- Variable declarations in MCP server implementation must be ordered correctly to avoid reference errors
+- Always test MCP servers with a dedicated client script before configuring in Cursor
+
+## User Specified Lessons
+
+- You have a python venv in ./venv. Always use (activate) it when doing python development. First, to check whether 'uv' is available, use `which uv`. If that's the case, first activate the venv, and then use `uv pip install` to install packages. Otherwise, fall back to `pip`.
+- Due to Cursor's limit, when you use `git` and `gh` and need to submit a multiline commit message, first write the message in a file, and then use `git commit -F <filename>` or similar command to commit. And then remove the file. Include "[Cursor] " in the commit message and PR title.
+
+## MCP Installer Lessons
+
+- The configuration file for Cursor is `~/.cursor/mcp.json` (or equivalent Windows path), not the Claude Desktop path
+- Always use `-y` flag with npx to skip prompts
+- For local servers, use the package name from package.json if available, otherwise use directory name
+- Verify both dependencies and capabilities for MCP compliance
+- Handle both Node.js and Python (uvx) based servers
+- Always check environment before installation (node, npm, uvx availability)
+- Auto-detection of arguments and environment variables can be done by examining package.json metadata and README files
+
+## Supabase MCP Lessons
+
+- Supabase MCP requires both project URL and API key (service_role key for full access)
+- Supabase MCP starts in read-only mode by default for safety
+- The Supabase MCP provides tools for database operations, management API access, and auth admin tools
+- When using Supabase MCP for database operations, prefer to leverage its built-in safety controls rather than implementing your own
+- To switch between safe and unsafe modes in Supabase MCP, use the live_dangerously tool
+- Supabase MCP supports all PostgreSQL operations including transaction control statements
+
+## Cursor learned
+
+- For search results, ensure proper handling of different character encodings (UTF-8) for international queries
+- When using seaborn styles in matplotlib, use 'seaborn-v0_8' instead of 'seaborn' as the style name due to recent seaborn version changes
+- Use 'gpt-4o' as the model name for OpenAI's GPT-4 with vision capabilities
+- When searching for recent news, use the current year (2025) instead of previous years, or simply use the "recent" keyword to get the latest information
+- When using Puppeteer, the headless option should be set to `true` (boolean) rather than 'new' (string) to avoid TypeScript type errors
+- When working with TypeScript Promise-based APIs, ensure proper async/await handling throughout the entire chain of function calls to avoid type mismatches between Promise<T> and T
+- When implementing a Model Context Protocol (MCP) server, use JSON-RPC 2.0 format with jsonrpc field set to "2.0" and method prefixed with "mcp." (e.g., "mcp.ListTools", "mcp.CallTool")
+- For an MCP server to be properly recognized by Cursor, it must implement the JSON-RPC 2.0 protocol exactly, with methods "mcp.ListTools" and "mcp.CallTool"
+- If experiencing TypeScript errors with the MCP SDK, consider implementing a pure JavaScript version that directly handles the JSON-RPC protocol instead
+- Tool responses should be formatted according to the MCP specification, with each tool returning a result object containing a content array
+- The MCP server should listen on stdin/stdout for JSON-RPC requests and responses
+- After making changes to the MCP configuration or implementation, Cursor needs to be restarted for the changes to take effect
+- In MCP server implementations, log messages should be sent to stderr, while only JSON-RPC responses should go to stdout to avoid JSON parsing errors
+- When writing test scripts for MCP servers, use the 'inherit' option for stderr in the child process to see log messages in the console
+- For maximum reliability, consider wrapping your MCP server with a redirect layer that strictly filters stdout to only include valid JSON-RPC 2.0 responses
+
+# Scratchpad
+
+# Ultimate Self-Evolving Cursor MCP
+
+## Project Goal
+Create a self-evolving Cursor MCP that improves upon devin.cursorrules capabilities while keeping it accessible and free. This will be a comprehensive, standalone MCP that can be published on smithery.ai.
+
+## Requirements
+- Rebranded and enhanced version of devin.cursorrules
+- Better tools implementation 
+- Self-evolution capabilities
+- No reliance on paid services
+- Optimized for Cursor
+
+## Development Plan
+
+### Phase 1: Core Infrastructure
+[X] Adapt existing mcp_installer.py for smithery.ai compatibility
+  - Added generate_smithery_yaml() function to create smithery.yaml files
+  - Implemented URL-based installation with auto-detection of env variables
+  - Added dedicated smithery command for manual yaml generation
+[X] Create smithery.yaml configuration file for our own MCP
+  - Added config schema with optional API keys
+  - Set up command function to pass environment variables
+  - Added example configuration
+[X] Add auto-detection of args and env variables (issue #1)
+  - Created package-metadata.ts utility for extracting metadata
+  - Implemented smart detection from package.json and README files
+  - Added fallback mechanisms for when metadata isn't explicitly defined
+  - Integrated with setup tool for automatic usage of detected args/env
+[X] Implement MCP compliance checking (issue #3)
+  - Enhanced isMcpCompliant function with detailed checks
+  - Added validation for MCP SDK dependencies
+  - Implemented capability verification
+  - Provided detailed compliance issues reporting
+
+### Phase 2: Enhance Tools
+[X] Set up TypeScript/Node.js project structure
+  - Created package.json with dependencies
+  - Added tsconfig.json for TypeScript configuration
+  - Organized directory structure for tools and memory modules
+  - Fixed Node.js type definitions by installing @types/node
+[X] Create simplified TypeScript implementation
+  - Implemented a basic stdio-based MCP server
+  - Created bridge implementation to Python tools
+  - Added tools registry and request handling
+[X] Convert key Python tools to TypeScript/Node.js for better integration
+  - Implemented web-scraper.ts with fallback to native implementation
+  - Implemented search-engine.ts with DuckDuckGo API fallback
+  - Implemented screenshot.ts with Puppeteer fallback
+  - Fixed linter errors in Puppeteer implementation
+[X] Create unified API for all tools
+  - Developed common interfaces for all tool inputs and responses
+  - Implemented a standardized tool calling mechanism
+[X] Implement memory/context persistence
+  - Created MemoryManager class for persistent storage
+  - Added support for namespaced memory
+  - Implemented automatic .cursorrules file updates
+[X] Create test script for integration testing
+  - Created comprehensive test.js to verify all tool functionality
+  - Added tests for memory persistence and lesson learning
+  - Implemented proper error handling and reporting
+[X] Add improved error handling
+  - Added robust error handling in all tool implementations
+  - Implemented structured error responses
+  - Added fallback mechanisms to handle failures gracefully
+  - Created comprehensive logging for debugging purposes
+
+### Phase 3: Self-Evolution
+[X] Create analytics for tool usage
+  - Added memory tracking for usage patterns
+[X] Implement feedback system
+  - Created learn_lesson system for recording lessons
+  - Added automatic updating of .cursorrules files
+[X] Design self-improvement mechanism
+  - Created SelfImprovement class for analyzing tool usage
+  - Implemented weighted metrics for success rate and response time
+  - Added report generation for tool performance
+  - Built automatic suggestion system for improvements
+  - Fixed async/await handling throughout Promise chain
+
+### Phase 4: Additional Tool Modules
+[X] AI Tools Module
+  - Added LLM query capabilities
+  - Implemented image analysis
+  - Added text-to-speech conversion
+  - Created screenshot functionality for web pages
+[X] Database Tools Module
+  - Implemented SQL query execution
+  - Added database schema inspection
+  - Created database creation functionality
+[X] File Tools Module
+  - Added advanced file watching capabilities
+  - Implemented file pattern matching
+  - Created batch processing for files
+
+### Phase 5: Packaging & Distribution
+[X] Complete documentation
+  - Created comprehensive README.md with installation instructions
+  - Documented project structure and development workflow
+  - Added usage examples and API documentation
+  - Included contributing guidelines
+[X] Create easy setup process
+  - Created setup.ts tool to handle installation directly within the MCP
+  - Added support for npm and Python package installation
+  - Implemented local installation capabilities
+  - Added configuration management for Cursor
+[X] Prepare for smithery.ai release
+  - Created comprehensive smithery.yaml configuration
+  - Defined all available tools with detailed schemas
+  - Added environment variable configurations with descriptions
+  - Included installation instructions and documentation links
+
+### Phase 6: Supabase Integration
+[X] Add proper Supabase integration support
+  - Enhanced mcp_installer.py with a dedicated supabase command
+  - Created a specialized install_supabase_mcp() function
+  - Added support for Supabase project URL, API key, and optional project reference
+  - Implemented proper error handling and logging
+[X] Create a user-friendly setup process
+  - Created a setup.sh script for easy installation
+  - Added prompts for Supabase credentials
+  - Made the process interactive and user-friendly
+  - Ensured proper error handling for dependencies
+[X] Update documentation
+  - Added Supabase integration information to README.md
+  - Documented the setup process
+  - Explained the benefits of Supabase MCP
+  - Listed the available database tools
+
+## Current Status
+The Ultimate Self-Evolving Cursor MCP is now feature-complete with the following components:
+
+1. Advanced JSON-RPC 2.0 MCP implementation with error handling
+2. Comprehensive memory management with lesson learning
+3. Enhanced workflow with multiple specialized tools:
+   - Web tools for scraping, searching, and screenshots
+   - Code tools for analysis, linting, and dependency management
+   - File tools for advanced operations and batch processing
+   - AI tools for LLM integration, image analysis, and more
+4. **Supabase integration for powerful database operations**:
+   - SQL query execution with safety controls
+   - Database schema inspection
+   - Management API access with safety classifications
+   - Auth Admin tools for user management
+5. Well-documented codebase with installation instructions
+6. Easy-to-use configuration script for Cursor integration
+
+## Next Steps
+1. Deploy to smithery.ai for community sharing
+2. Create a starter template for users
+3. Add additional integrations with external services
+4. Develop video tutorials for new users
