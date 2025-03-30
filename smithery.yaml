@@ -1,0 +1,213 @@
+# Smithery configuration file: https://smithery.ai/docs/config#smitheryyaml
+name: ultimate-cursor-mcp
+version: 1.0.0
+description: A self-evolving Cursor MCP with comprehensive tools and analytics
+author: Your Name
+license: MIT
+
+command: npx ts-node src/index.ts
+
+# Configure the environment variables
+env:
+  # Optional API keys for enhanced functionality
+  OPENAI_API_KEY:
+    description: OpenAI API key for LLM features
+    required: false
+  ANTHROPIC_API_KEY:
+    description: Anthropic API key for Claude LLM features
+    required: false
+  GEMINI_API_KEY:
+    description: Google Gemini API key
+    required: false
+  DEEPSEEK_API_KEY:
+    description: DeepSeek API key
+    required: false
+  
+  # Tool-specific configurations
+  SEARCH_RESULTS_COUNT:
+    description: Number of results to return from search
+    required: false
+    default: "5"
+  DEFAULT_SCREENSHOT_WIDTH:
+    description: Default width for screenshots
+    required: false
+    default: "1280"
+  DEFAULT_SCREENSHOT_HEIGHT:
+    description: Default height for screenshots
+    required: false
+    default: "800"
+
+# Requirements
+requirements:
+  - node: ">=16.0.0"
+  - npm: ">=7.0.0"
+  
+# Available tools
+tools:
+  - name: query_llm
+    description: Query a large language model with a prompt
+    schema:
+      type: object
+      properties:
+        prompt:
+          type: string
+          description: The prompt to send to the LLM
+        provider:
+          type: string
+          description: The LLM provider to use (openai, anthropic, gemini, local)
+          enum: [openai, anthropic, gemini, local]
+          default: openai
+        image_path:
+          type: string
+          description: Optional path to an image file to include with the prompt
+      required:
+        - prompt
+  
+  - name: web_scrape
+    description: Scrape content from a webpage
+    schema:
+      type: object
+      properties:
+        url:
+          type: string
+          description: The URL to scrape
+        selector:
+          type: string
+          description: Optional CSS selector to target specific elements
+        max_content_length:
+          type: number
+          description: Maximum content length to return
+          default: 10000
+      required:
+        - url
+  
+  - name: search
+    description: Search the web using a search engine
+    schema:
+      type: object
+      properties:
+        query:
+          type: string
+          description: The search query
+        max_results:
+          type: number
+          description: Maximum number of results to return
+          default: 5
+      required:
+        - query
+  
+  - name: take_screenshot
+    description: Take a screenshot of a webpage
+    schema:
+      type: object
+      properties:
+        url:
+          type: string
+          description: The URL to take a screenshot of
+        output:
+          type: string
+          description: The output filename
+          default: screenshot.png
+        width:
+          type: number
+          description: The width of the screenshot in pixels
+          default: 1280
+        height:
+          type: number
+          description: The height of the screenshot in pixels
+          default: 800
+      required:
+        - url
+  
+  - name: setup
+    description: Install, configure, verify, or uninstall MCP servers
+    schema:
+      type: object
+      properties:
+        action:
+          type: string
+          description: The action to perform
+          enum: [install, verify, configure, uninstall]
+        package_name:
+          type: string
+          description: The name of the package to install or uninstall
+        path:
+          type: string
+          description: The path to a local MCP server to install
+        args:
+          type: array
+          items: 
+            type: string
+          description: Arguments to pass to the MCP server
+        env:
+          type: array
+          items:
+            type: string
+          description: Environment variables to set for the MCP server (format KEY=VALUE)
+      required:
+        - action
+  
+  - name: save_to_memory
+    description: Save information to persistent memory
+    schema:
+      type: object
+      properties:
+        key:
+          type: string
+          description: The key to store the information under
+        value:
+          type: string
+          description: The information to store
+        namespace:
+          type: string
+          description: Optional namespace for organizing memory
+          default: default
+      required:
+        - key
+        - value
+  
+  - name: get_from_memory
+    description: Retrieve information from persistent memory
+    schema:
+      type: object
+      properties:
+        key:
+          type: string
+          description: The key to retrieve information for
+        namespace:
+          type: string
+          description: Optional namespace for organizing memory
+          default: default
+      required:
+        - key
+  
+  - name: learn_lesson
+    description: Record a lesson learned for future improvement
+    schema:
+      type: object
+      properties:
+        lesson:
+          type: string
+          description: The lesson to record
+        category:
+          type: string
+          description: Category for the lesson
+          enum: [general, coding, tools, cursor, MCP]
+          default: general
+      required:
+        - lesson
+
+# Installation instructions that will be shown to users
+installation:
+  steps:
+    - Clone the repository: git clone https://github.com/yourusername/ultimate-cursor-mcp.git
+    - Install dependencies: cd ultimate-cursor-mcp && npm install
+    - Build the TypeScript code: npm run build
+    - Install as an MCP server: python tools/mcp_installer.py local .
+
+# Documentation links
+documentation:
+  - label: GitHub Repository
+    url: https://github.com/yourusername/ultimate-cursor-mcp
+  - label: Usage Guide
+    url: https://github.com/yourusername/ultimate-cursor-mcp/blob/main/README.md 

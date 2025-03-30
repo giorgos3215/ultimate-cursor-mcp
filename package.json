@@ -1,0 +1,57 @@
+{
+  "name": "ultimate-cursor-mcp",
+  "version": "1.0.0",
+  "description": "A self-evolving Cursor MCP with comprehensive tools and analytics",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "start": "ts-node src/index.ts",
+    "dev": "ts-node-dev --respawn src/index.ts",
+    "test": "node test.js",
+    "lint": "eslint src/**/*.ts"
+  },
+  "dependencies": {
+    "axios": "^1.6.7",
+    "cheerio": "^1.0.0-rc.12",
+    "dotenv": "^16.4.5",
+    "puppeteer": "^22.4.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.11.25",
+    "@typescript-eslint/eslint-plugin": "^7.0.2",
+    "@typescript-eslint/parser": "^7.0.2",
+    "eslint": "^8.56.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.2",
+    "ts-node-dev": "^2.0.0"
+  },
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/username/cursor-evolve-mcp.git"
+  },
+  "keywords": [
+    "cursor",
+    "mcp",
+    "ai",
+    "assistant",
+    "model-context-protocol",
+    "smithery",
+    "self-evolving"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "bugs": {
+    "url": "https://github.com/username/cursor-evolve-mcp/issues"
+  },
+  "homepage": "https://github.com/username/cursor-evolve-mcp#readme"
+}
