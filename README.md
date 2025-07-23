@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/giorgos3215-ultimate-cursor-mcp-badge.png)](https://mseep.ai/app/giorgos3215-ultimate-cursor-mcp)
+
 # Ultimate Self-Evolving Cursor MCP
 
 A comprehensive MCP (Model Context Protocol) implementation for Cursor, featuring advanced tools for web, code, file operations, and Supabase database management.
